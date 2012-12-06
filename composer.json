@@ -2,7 +2,7 @@
     "name":         "ailove-dev/vk-bundle",
     "description":  "vk authentication bundle via FOSUserBundle",
     "keywords":     ["VKontakte", "Symfony2", "VK", "Authentication", "FOSUserBundle", "FOS", "FriendsOfSymfony"],
-    "type":         "library",
+    "type":         "symfony-bundle",
     "homepage":     "https://github.com/ailove-dev/VKBundle.git",
     "authors":      [
         {
