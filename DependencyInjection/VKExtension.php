@@ -29,7 +29,8 @@ class VKExtension extends Extension
         $container->setParameter('vk.app_secret', $config['app_secret']);
         $container->setParameter('vk.access_token_url', $config['access_token_url']);
         $container->setParameter('vk.scope', $config['scope']);
-        $container->setParameter('vk.redirect_uri', $config['redirect_uri']);
+//        $container->setParameter('vk.redirect_uri', $config['redirect_uri']);
+        $container->setParameter('vk.redirect_route', $config['redirect_route']);
         $container->setParameter('vk.dialog_url', $config['dialog_url']);
         $container->setParameter('vk.oauth_proxy_class', $config['oauth_proxy_class']);
     }

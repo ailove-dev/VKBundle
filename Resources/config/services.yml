@@ -11,10 +11,10 @@ services:
             accessTokenUrl: %vk.access_token_url%
             dialogUrl: %vk.dialog_url%
             responseType: 'code'
-            redirectUri: %vk.redirect_uri% 
             scope: %vk.scope%
-        calls: 
+        calls:
             - [ setContainer, [ '@service_container' ] ]
+            - [ setRedirectRoute, [ %vk.redirect_route% ] ]
     vk.api:
         class: 'VkPhpSdk'
 #        file: %vk.sdk_file%

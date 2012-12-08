@@ -53,7 +53,7 @@ class VKProvider implements AuthenticationProviderInterface
      * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token     Auth token
      * @param boolean                                                              $checkUser Check user
      *
-     * @return \Application\Sonata\UserBundle\Security\VK\Authentication\Token\VKUserToken|null
+     * @return VKUserToken|null
      *
      * @throws \Exception|\Symfony\Component\Security\Core\Exception\AuthenticationException
      */
@@ -99,7 +99,7 @@ class VKProvider implements AuthenticationProviderInterface
      * @param int     $vkId      VK user ID
      * @param boolean $checkUser Check user
      *
-     * @return \Application\Sonata\UserBundle\Security\VK\Authentication\Token\VKUserToken
+     * @return VKUserToken
      *
      * @throws \RuntimeException
      */

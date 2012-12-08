@@ -16,12 +16,12 @@ class VKOauthSessionProxy extends Oauth2Proxy
     protected $clientId;
     protected $clientSecret;
     protected $dialogUrl;
-    protected $redirectUri;
     protected $scope;
     protected $responseType;
     protected $accessTokenUrl;
     protected $accessParams;
     protected $authJson;
+    protected $redirectUri;
 
     /**
      * @var \Symfony\Component\DependencyInjection\Container
@@ -29,7 +29,12 @@ class VKOauthSessionProxy extends Oauth2Proxy
     protected $serviceContainer;
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Session
+     * @var string
+     */
+    protected $redirectRoute;
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\Session\Session
      */
     protected $session;
 
@@ -57,8 +62,8 @@ class VKOauthSessionProxy extends Oauth2Proxy
         $accessTokenUrl,
         $dialogUrl,
         $responseType,
-        $redirectUri = null,
-        $scope = null
+        $scope = null,
+        $redirectUri = null
     )
     {
         $this->clientId = $clientId;
@@ -66,7 +71,6 @@ class VKOauthSessionProxy extends Oauth2Proxy
         $this->accessTokenUrl = $accessTokenUrl;
         $this->dialogUrl = $dialogUrl;
         $this->responseType = $responseType;
-        $this->redirectUri = $redirectUri;
         $this->scope = $scope;
     }
 
@@ -134,11 +138,15 @@ class VKOauthSessionProxy extends Oauth2Proxy
     {
         $result = false;
 
-        if (null === $this->redirectUri && null !== $redirectUri) {
+
+        if (null !== $redirectUri) {
             $this->redirectUri = $redirectUri;
+        } else {
+            $this->redirectUri = $this->serviceContainer->get('router')->generate($this->getRedirectRoute(), array(), true);
         }
 
-        if (($this->authJson = $this->getPersistentData('authJson'))) {
+        if ($this->getPersistentData('authJson', false) && !is_null(json_decode($this->getPersistentData('authJson')))) {
+            $this->authJson = $this->getPersistentData('authJson');
             // Data already stored in the session
             $result = true;
         } else {
@@ -155,13 +163,15 @@ class VKOauthSessionProxy extends Oauth2Proxy
 
                 return new RedirectResponse($this->dialogUrl);
             } else {
-                $this->authJson = file_get_contents($this->accessTokenUrl .
+                $url = $this->accessTokenUrl .
                     '?client_id=' . $this->clientId .
                     '&client_secret=' . $this->clientSecret .
                     '&code=' . $code .
-                    '&redirect_uri=' . urlencode($this->redirectUri));
+                    '&redirect_uri=' . urlencode($this->redirectUri);
 
-                if ($this->authJson !== false) {
+                $this->authJson = file_get_contents($url);
+
+                if ($this->authJson !== false && !is_null(json_decode($this->authJson))) {
                     $this->setPersistentData('authJson', $this->authJson);
                     $result = true;
                 } else {
@@ -275,5 +285,21 @@ class VKOauthSessionProxy extends Oauth2Proxy
     public function getClientSecret()
     {
         return $this->clientSecret;
+    }
+
+    /**
+     * @param string $redirectRoute
+     */
+    public function setRedirectRoute($redirectRoute)
+    {
+        $this->redirectRoute = $redirectRoute;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRedirectRoute()
+    {
+        return $this->redirectRoute;
     }
 }
