@@ -11,7 +11,8 @@
     ],
     "require": {
         "php": ">=5.3.1",
-        "ailove-dev/vk-php-sdk": "dev-master"
+        "ailove-dev/vk-php-sdk": "dev-master",
+        "ailove-dev/abstract-social-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": {
