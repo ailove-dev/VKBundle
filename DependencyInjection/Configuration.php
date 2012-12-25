@@ -2,53 +2,15 @@
 
 namespace Ailove\VKBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Ailove\AbstractSocialBundle\Classes\AbstractConfiguration;
 
-/**
- * This is the class that validates and merges configuration from your app/config files
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
- */
-class Configuration implements ConfigurationInterface
+class Configuration extends AbstractConfiguration
 {
     /**
-     * {@inheritDoc}
+     * @return string id of the root tree
      */
-    public function getConfigTreeBuilder()
+    protected function getTreeName()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('vk');
-
-        $rootNode
-            ->children()
-                ->scalarNode('app_id')->cannotBeEmpty()->end()
-                ->scalarNode('app_secret')
-                    ->isRequired()
-                    ->cannotBeEmpty()
-                ->end()
-                ->scalarNode('access_token_url')
-                    ->defaultValue('https://oauth.vk.com/oauth/access_token')
-                    ->cannotBeEmpty()
-                ->end()
-                ->scalarNode('oauth_proxy_class')
-                    ->defaultValue('Ailove\VKBundle\Service\VKOauthSessionProxy')
-                    ->cannotBeEmpty()
-                ->end()
-                ->scalarNode('redirect_route')
-                    ->isRequired()
-                    ->cannotBeEmpty()
-                ->end()
-                ->scalarNode('scope')
-                    ->cannotBeEmpty()
-                    ->defaultValue('friends,groups')
-                ->end()
-                ->scalarNode('dialog_url')
-                    ->defaultValue('https://oauth.vk.com/oauth/authorize')
-                    ->cannotBeEmpty()
-                ->end()
-            ->end();
-
-        return $treeBuilder;
+        return 'vk';
     }
 }

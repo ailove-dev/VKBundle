@@ -1,30 +1,43 @@
 parameters:
-#    vk.example.class: Ailove\VKBundle\Example
+    vk.class.proxy:   Ailove\VKBundle\Service\VKOauthSessionProxy
+    vk.class.api:     Ailove\VKBundle\Service\VkPhpSdk
+    vk.class.entry_point: Ailove\VKBundle\Security\Firewall\VKEntryPoint
+    vk.response_type:  code
+    vk.access_token_url: https://oauth.vk.com/oauth/access_token
+    vk.dialog_url: https://oauth.vk.com/oauth/authorize
+    vk.scope: 'friends,groups'
 
 services:
+
     vk.oauth.proxy:
-        class: %vk.oauth_proxy_class%
-#        file: %vk.oauth_proxy_file%
-        arguments: 
-            clientId: %vk.app_id% 
-            clientSecret: %vk.app_secret%
-            accessTokenUrl: %vk.access_token_url%
-            dialogUrl: %vk.dialog_url%
-            responseType: 'code'
-            scope: %vk.scope%
+        class: %vk.class.proxy%
+        arguments:
+            - { accessTokenUrl: %vk.access_token_url%, dialogUrl: %vk.dialog_url%, responseType: %vk.response_type%, redirectRoute: %vk.redirect_route% , scope: %vk.scope% }
         calls:
             - [ setContainer, [ '@service_container' ] ]
-            - [ setRedirectRoute, [ %vk.redirect_route% ] ]
+            - [ setSdk, [ '@vk.api' ] ]
+
     vk.api:
-        class: 'VkPhpSdk'
-#        file: %vk.sdk_file%
-    vk.user.provider: 
+        class: %vk.class.api%
+        arguments:
+            clientId: %vk.app_id%
+            clientSecret: %vk.app_secret%
+
+    vk.user.provider:
         class: 'Ailove\VKBundle\Security\User\VKUserProvider'
         arguments: [ '@vk.oauth.proxy', '@fos_user.user_manager' ]
+
     vk.auth.provider:
         class: 'Ailove\VKBundle\Security\Authentication\Provider\VKProvider'
         arguments: [ '@vk.oauth.proxy', '@vk.user.provider', '@security.user_checker' ]
+
     vk.firewall.listener:
         class: 'Ailove\VKBundle\Security\Firewall\VKListener'
         parent: security.authentication.listener.abstract
         abstract: true
+
+    vk.security.authentication.entry_point:
+        class: %vk.class.entry_point%
+        arguments: [ @service_container ]
+        tags:
+          -  { name: social.entryPoint }

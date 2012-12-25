@@ -1,0 +1,9 @@
+_vk_security_check:
+    pattern: /login_check/
+    defaults: { _controller: 'FOSUserBundle:FOSUserSecurity:check' }
+_vk_login:
+    pattern: /login/
+    defaults: { _controller: 'VKBundle:Social:login' }
+_vk_connect:
+    pattern: /login/
+    defaults: { _controller: 'VKBundle:Social:connect' }
