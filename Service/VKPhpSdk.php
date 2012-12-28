@@ -13,7 +13,7 @@ use Ailove\AbstractSocialBundle\Classes\SdkInterface;
 /**
  * VK oauth proxy with session support.
  */
-class VKphpSdk extends \VkPhpSdk implements SdkInterface
+class VKPhpSdk extends \VkPhpSdk implements SdkInterface
 {
     protected $appId;
     protected $appSecret;
