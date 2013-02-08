@@ -1,6 +1,6 @@
 parameters:
     vk.class.proxy:   Ailove\VKBundle\Service\VKOauthSessionProxy
-    vk.class.api:     Ailove\VKBundle\Service\VkPhpSdk
+    vk.class.api:     Ailove\VKBundle\Service\VKPhpSdk
     vk.class.entry_point: Ailove\VKBundle\Security\Firewall\VKEntryPoint
     vk.response_type:  code
     vk.access_token_url: https://oauth.vk.com/oauth/access_token
